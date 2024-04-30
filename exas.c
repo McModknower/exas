@@ -33,7 +33,7 @@
 #include "exas.h"
 #include "config.h"
 
-void usage(void)
+void usageAndExit(void)
 {
     fprintf(stderr, "Usage: exas [-u user] command [args ...]\n");
     exit(1);
@@ -316,22 +316,19 @@ int main(int argc, char **argv)
     }
 
     if (optind >= argc)
-        usage();
+        usageAndExit();
 
-    if (optind < argc)
-    {
-        for (paramc = 0; optind + paramc < argc; ++paramc)
-            ;
+    // here is optind < argc
+    paramc = argc - optind;
 
-        params = malloc((paramc + 1) * sizeof(char *));
+    params = calloc((paramc + 1), sizeof(char *));
 
-        for (size_t i = 0; i < paramc; ++i)
-            params[i] = strdup(argv[optind + i]);
+    for (int i = 0; i < paramc; ++i)
+      params[i] = strdup(argv[optind + i]);
 
-        params[paramc] = NULL;
-        /* point "command" => params[0] */
-        command = params[0];
-    }
+    params[paramc] = NULL;
+    /* point "command" => params[0] */
+    command = params[0];
 
     if (usertgtname == NULL)
         getpwuid_r(geteuid(), &usertgt, bufusertgt, bufsize, &result);

@@ -35,7 +35,7 @@ typedef struct {
     const char **arguments;
 } Rule;
 
-void usage(void);
+void usageAndExit(void);
 void makeenv(const char **keeplist, char ***new_env);
 void execcmd(struct passwd caller, struct passwd usertgt, const char *command, int paramc, char **params);
 char *pwdprompt(struct passwd userclr);
